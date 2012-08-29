@@ -5,7 +5,7 @@
 	<groupId>org.vaadin</groupId>
 	<artifactId>collabaceeditor</artifactId>
 	<packaging>jar</packaging>
-	<version>0.2.0</version>
+	<version>0.2.2</version>
 	<name>CollabAceEditor</name>
 
 	<properties>
@@ -232,13 +232,13 @@
 		<dependency>
 			<groupId>org.vaadin</groupId>
 			<artifactId>collabtextarea</artifactId>
-			<version>0.2.1</version>
+			<version>0.2.2</version>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.vaadin</groupId>
 			<artifactId>aceeditor</artifactId>
-			<version>0.2.0</version>
+			<version>0.2.2</version>
 		</dependency>
 
 		<!-- DEVELOPMENT DEPENDENCIES -->
