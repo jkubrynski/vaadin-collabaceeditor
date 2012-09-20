@@ -31,7 +31,7 @@ public class ErrorCheckTask implements DiffCalculator<Doc, DocDiff> {
 
 //	@Override
 	public boolean needsToRunAfter(DocDiff diff, long byCollaboratorId) {
-		return !diff.getTextDiff().isIdentity();
+		return diff==null || !diff.getTextDiff().isIdentity();
 	}
 
 //	@Override
@@ -46,8 +46,6 @@ public class ErrorCheckTask implements DiffCalculator<Doc, DocDiff> {
 		String text = value.getText();
 
 		Collection<Marker> errors = checker.getErrors(text);
-
-		// Thread.sleep(1000);
 
 		HashMap<String, MarkerWithContext> added = new HashMap<String, MarkerWithContext>();
 		for (Marker em : errors) {
