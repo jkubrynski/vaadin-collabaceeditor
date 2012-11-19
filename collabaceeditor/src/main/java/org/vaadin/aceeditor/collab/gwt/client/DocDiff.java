@@ -12,17 +12,17 @@ import org.vaadin.aceeditor.collab.gwt.shared.Doc;
 import org.vaadin.aceeditor.collab.gwt.shared.MarkerDiff;
 import org.vaadin.aceeditor.collab.gwt.shared.MarkerWithContext;
 import org.vaadin.aceeditor.gwt.shared.Marker;
-import org.vaadin.diffsync.gwt.client.TextDiff;
+import org.vaadin.diffsync.gwt.client.GwtTextDiff;
 import org.vaadin.diffsync.gwt.shared.Diff;
 
 public class DocDiff implements Diff<Doc> {
 
-	private final TextDiff td;
+	private final GwtTextDiff td;
 	private final Map<String, MarkerWithContext> added;
 	private final Map<String, MarkerDiff> moved;
 	private final Collection<String> removed;
 
-	public static final DocDiff IDENTITY = new DocDiff(TextDiff.IDENTITY);
+	public static final DocDiff IDENTITY = new DocDiff(GwtTextDiff.IDENTITY);
 	private static final Map<String, MarkerWithContext> NO_ADDED = Collections
 			.emptyMap();
 	private static final Map<String, MarkerDiff> NO_MOVED = Collections
@@ -31,11 +31,11 @@ public class DocDiff implements Diff<Doc> {
 	// private static final Collection<String> NO_REMOVED =
 	// Collections.emptyList();
 
-	public static DocDiff create(TextDiff td) {
+	public static DocDiff create(GwtTextDiff td) {
 		return new DocDiff(td);
 	}
 
-	public static DocDiff create(TextDiff td,
+	public static DocDiff create(GwtTextDiff td,
 			Map<String, MarkerWithContext> addedMarkers,
 			Map<String, MarkerDiff> movedMarkers,
 			Collection<String> deletedMarkers) {
@@ -44,11 +44,11 @@ public class DocDiff implements Diff<Doc> {
 
 	public static DocDiff removeMarker(String markerId) {
 		List<String> removed = Collections.singletonList(markerId);
-		return new DocDiff(TextDiff.IDENTITY, NO_ADDED, NO_MOVED, removed);
+		return new DocDiff(GwtTextDiff.IDENTITY, NO_ADDED, NO_MOVED, removed);
 	}
 
 	public static DocDiff diff(Doc doc1, Doc doc2) {
-		TextDiff td = TextDiff.diff(doc1.getText(), doc2.getText());
+		GwtTextDiff td = GwtTextDiff.diff(doc1.getText(), doc2.getText());
 		String text2 = doc2.getText();
 
 		Map<String, Marker> m1 = doc1.getMarkers();
@@ -75,14 +75,14 @@ public class DocDiff implements Diff<Doc> {
 		return new DocDiff(td, added, diffs, removedIds);
 	}
 
-	private DocDiff(TextDiff td) {
+	private DocDiff(GwtTextDiff td) {
 		this.td = td;
 		this.added = Collections.emptyMap();
 		this.moved = Collections.emptyMap();
 		this.removed = Collections.emptyList();
 	}
 
-	private DocDiff(TextDiff td, Map<String, MarkerWithContext> addedMarkers,
+	private DocDiff(GwtTextDiff td, Map<String, MarkerWithContext> addedMarkers,
 			Map<String, MarkerDiff> movedMarkers,
 			Collection<String> deletedMarkers) {
 		this.td = td;
@@ -91,7 +91,7 @@ public class DocDiff implements Diff<Doc> {
 		this.removed = deletedMarkers;
 	}
 
-	public TextDiff getTextDiff() {
+	public GwtTextDiff getTextDiff() {
 		return td;
 	}
 
@@ -153,12 +153,12 @@ public class DocDiff implements Diff<Doc> {
 
 	public static Marker adjustMarkerBasedOnContext(MarkerWithContext ma,
 			String text) {
-		int start = TextDiff.getDMP().match_main(text, ma.getStartContext(),
+		int start = GwtTextDiff.getDMP().match_main(text, ma.getStartContext(),
 				ma.getMarker().getStart());
 		if (start == -1) {
 			return null;
 		}
-		int end = TextDiff.getDMP().match_main(text, ma.getEndContext(),
+		int end = GwtTextDiff.getDMP().match_main(text, ma.getEndContext(),
 				ma.getMarker().getEnd());
 		if (end == -1) {
 			return null;

@@ -1,6 +1,9 @@
 package org.vaadin.aceeditor.collab;
 
+import org.vaadin.aceeditor.collab.gwt.shared.Doc;
 import org.vaadin.aceeditor.gwt.ace.AceMode;
+import org.vaadin.diffsync.Shared;
+import org.vaadin.diffsync.gwt.shared.SendPolicy;
 
 import com.vaadin.Application;
 import com.vaadin.terminal.ExternalResource;
@@ -13,7 +16,8 @@ public class CollabAceEditorDemo extends Application {
 
 	// The shared text to be edited.
 	// A static variable so that everybody gets the same instance.
-	private static SharedText sharedText = new SharedText("var foo = {};\n");
+	//private static SharedText sharedText = new SharedText("var foo = {};\n");
+	private static Shared<Doc, DocDiff> sharedText = new Shared<Doc, DocDiff>(new Doc("var foo = {};\n"));
 	
 	@Override
 	public void init() {
@@ -23,7 +27,7 @@ public class CollabAceEditorDemo extends Application {
 	// Subclassing Window and overriding getWindow to make multiple tabs work.
 
 	private class CollabDemoWindow extends Window {
-		private CollabAceEditor editor;
+		private SuggestibleCollabAceEditor editor;
 		CollabDemoWindow() {
 			super();
 			getContent().setSizeFull();
@@ -31,15 +35,22 @@ public class CollabAceEditorDemo extends Application {
 			la.setSizeFull();
 			addComponent(la);
 			
-			editor = new CollabAceEditor(sharedText);
-			editor.setSendDelay(50);
+			editor = new SuggestibleCollabAceEditor(sharedText);
 			editor.setSizeFull();
-			editor.setPollInterval(500);
 			editor.setMode(AceMode.javascript);
+			editor.setSendPolicy(SendPolicy.DELAY_AFTER_IDLE);
+			editor.setSendDelay(1000);
+			
+//			editor.addListener(new SelectionChangeListener() {
+//				public void selectionChanged(int start, int end) {
+//					System.out.println("Selection: "+start+"-"+end);
+//				}
+//			});
 			
 			la.addComponent(new Label("Everybody can edit this same JavaScript code:"));
 			la.addComponent(editor);
 			la.setExpandRatio(editor, 1);
+			
 		}
 	}
 	

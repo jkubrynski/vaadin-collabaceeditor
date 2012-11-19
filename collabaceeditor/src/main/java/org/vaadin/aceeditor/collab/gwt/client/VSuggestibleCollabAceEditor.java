@@ -76,7 +76,7 @@ public class VSuggestibleCollabAceEditor extends VCollabDocAceEditor
 
 //	@Override
 	public void suggestionRequested(int cursor) {
-		valueChangedSendASAP();
+		valueChangedSendEvenIfIdentityASAP();
 	}
 
 	@Override

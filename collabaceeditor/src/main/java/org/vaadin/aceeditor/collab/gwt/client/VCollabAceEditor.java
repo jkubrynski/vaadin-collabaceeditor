@@ -3,14 +3,14 @@ package org.vaadin.aceeditor.collab.gwt.client;
 import org.vaadin.aceeditor.gwt.client.AceEditorFacade;
 import org.vaadin.aceeditor.gwt.client.EditorFacade;
 import org.vaadin.aceeditor.gwt.client.EditorFacade.TextChangeListener;
-import org.vaadin.diffsync.gwt.client.TextDiff;
+import org.vaadin.diffsync.gwt.client.GwtTextDiff;
 import org.vaadin.diffsync.gwt.client.VAbstractDiffSyncComponent;
 
 import com.vaadin.terminal.gwt.client.ApplicationConnection;
 import com.vaadin.terminal.gwt.client.UIDL;
 
 public class VCollabAceEditor extends
-		VAbstractDiffSyncComponent<String, TextDiff> {
+		VAbstractDiffSyncComponent<String, GwtTextDiff> {
 
 	EditorFacade editor = new AceEditorFacade();
 
@@ -36,11 +36,11 @@ public class VCollabAceEditor extends
 	}
 
 	@Override
-	protected void applyDiff(TextDiff diff) {
+	protected void applyDiff(GwtTextDiff diff) {
 		String oldText = editor.getText();
 		String newText = diff.applyTo(oldText);
 		int oldCursor = editor.getCursor();
-		int newCursor = TextDiff.positionInNewText(oldText, oldCursor, newText);
+		int newCursor = GwtTextDiff.positionInNewText(oldText, oldCursor, newText);
 		editor.setText(newText, false);
 		editor.setCursor(newCursor, false);
 	}
@@ -51,26 +51,21 @@ public class VCollabAceEditor extends
 	}
 
 	@Override
-	protected String initialValue() {
-		return "";
+	protected GwtTextDiff diff(String v1, String v2) {
+		return GwtTextDiff.diff(v1, v2);
 	}
 
 	@Override
-	protected TextDiff diff(String v1, String v2) {
-		return TextDiff.diff(v1, v2);
-	}
-
-	@Override
-	protected void diffToClient(TextDiff diff, ApplicationConnection client,
+	protected void diffToClient(GwtTextDiff diff, ApplicationConnection client,
 			String paintableId, boolean immediate) {
 		client.updateVariable(paintableId, "diff", diff.getDiffString(), immediate);
 
 	}
 
 	@Override
-	protected TextDiff diffFromUIDL(UIDL uidl) {
+	protected GwtTextDiff diffFromUIDL(UIDL uidl) {
 		if (uidl.hasVariable("diff")) {
-			return TextDiff.fromString(uidl.getStringVariable("diff"));
+			return GwtTextDiff.fromString(uidl.getStringVariable("diff"));
 		}
 		return null;
 	}

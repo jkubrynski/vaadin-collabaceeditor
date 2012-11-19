@@ -1,7 +1,7 @@
 package org.vaadin.aceeditor.collab;
 
 import org.vaadin.diffsync.Shared;
-import org.vaadin.diffsync.TextDiff;
+import org.vaadin.diffsync.text.TextDiff;
 
 /**
  * A shared text that can be edited collaboratively.
