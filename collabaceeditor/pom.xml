@@ -5,12 +5,12 @@
 	<groupId>org.vaadin</groupId>
 	<artifactId>collabaceeditor</artifactId>
 	<packaging>jar</packaging>
-	<version>0.2.4</version>
+	<version>0.3.0-SNAPSHOT</version>
 	<name>CollabAceEditor</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<vaadin.version>6.7.8</vaadin.version>
+		<vaadin.version>[6.7.0, 7.0.0.alpha1)</vaadin.version>
 		<gwt.version>2.3.0</gwt.version>
 		<gwt.plugin.version>2.2.0</gwt.plugin.version>
 	</properties>
@@ -157,6 +157,60 @@
 				<directory>src/main/resources</directory>
 			</resource>
 		</resources>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.codehaus.mojo
+										</groupId>
+										<artifactId>
+											gwt-maven-plugin
+										</artifactId>
+										<versionRange>
+											[2.2.0,)
+										</versionRange>
+										<goals>
+											<goal>resources</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>com.vaadin</groupId>
+										<artifactId>
+											vaadin-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.0.2,)
+										</versionRange>
+										<goals>
+											<goal>
+												update-widgetset
+											</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 
 	<repositories>
@@ -229,16 +283,22 @@
 		<!-- <dependency> <groupId>org.vaadin</groupId> <artifactId>dontpush-addon-ozonelayer</artifactId> 
 			<version>0.4.8</version> </dependency> -->
 
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.vaadin</groupId> -->
+<!-- 			<artifactId>collabtextarea</artifactId> -->
+<!-- 			<version>0.2.2</version> -->
+<!-- 		</dependency> -->
+
 		<dependency>
 			<groupId>org.vaadin</groupId>
-			<artifactId>collabtextarea</artifactId>
-			<version>0.2.2</version>
+			<artifactId>diffsync</artifactId>
+			<version>0.3.0-SNAPSHOT</version>
 		</dependency>
-		
+			
 		<dependency>
 			<groupId>org.vaadin</groupId>
 			<artifactId>aceeditor</artifactId>
-			<version>0.2.3</version>
+			<version>0.2.4</version>
 		</dependency>
 
 		<!-- DEVELOPMENT DEPENDENCIES -->
