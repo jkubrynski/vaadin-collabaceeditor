@@ -17,8 +17,7 @@ import org.vaadin.aceeditor.gwt.client.EditorFacade.SelectionChangeListener;
 import org.vaadin.aceeditor.gwt.client.EditorFacade.TextChangeListener;
 import org.vaadin.aceeditor.gwt.client.MarkerEditorFacade;
 import org.vaadin.aceeditor.gwt.shared.Marker;
-import org.vaadin.aceeditor.gwt.shared.Util;
-import org.vaadin.diffsync.gwt.client.TextDiff;
+import org.vaadin.diffsync.gwt.client.GwtTextDiff;
 import org.vaadin.diffsync.gwt.client.VAbstractDiffSyncComponent;
 
 import com.google.gwt.core.client.JsArrayMixed;
@@ -179,7 +178,7 @@ public class VCollabDocAceEditor extends
 		}
 		if (listeningSelections) {
 			selectionChanged = true;
-			valueChanged();
+			valueChangedSendEvenIfIdentity();
 		}
 	}
 
@@ -187,7 +186,7 @@ public class VCollabDocAceEditor extends
 	public void selectionChanged() {
 		if (listeningSelections) {
 			selectionChanged = true;
-			valueChanged();
+			valueChangedSendEvenIfIdentity();
 		}
 	}
 
@@ -199,7 +198,7 @@ public class VCollabDocAceEditor extends
 
 		JsArrayMixed realDiffs = null;
 		if (textChanged) {
-			realDiffs = TextDiff.getDMP().diff_main(oldText, newText);
+			realDiffs = GwtTextDiff.getDMP().diff_main(oldText, newText);
 		}
 
 		Map<String, Marker> oldMarkers = markerEditor.getMarkers();
@@ -227,12 +226,12 @@ public class VCollabDocAceEditor extends
 
 		markerEditor.clearMarkers();
 		if (textChanged) {
-			int newCursor = TextDiff.getDMP().diff_xIndex(realDiffs,
+			int newCursor = GwtTextDiff.getDMP().diff_xIndex(realDiffs,
 					markerEditor.getCursor());
 			int[] oldSel = markerEditor.getSelection();
-			int newSelStart = TextDiff.getDMP().diff_xIndex(realDiffs,
+			int newSelStart = GwtTextDiff.getDMP().diff_xIndex(realDiffs,
 					oldSel[0]);
-			int newSelEnd = TextDiff.getDMP().diff_xIndex(realDiffs, oldSel[1]);
+			int newSelEnd = GwtTextDiff.getDMP().diff_xIndex(realDiffs, oldSel[1]);
 			markerEditor.setTextCursorSelection(newText, newCursor,
 					newSelStart, newSelEnd, false);
 		}
@@ -249,8 +248,8 @@ public class VCollabDocAceEditor extends
 		if (diffs == null) {
 			return m;
 		}
-		int start = TextDiff.getDMP().diff_xIndex(diffs, m.getStart());
-		int end = TextDiff.getDMP().diff_xIndex(diffs, m.getEnd());
+		int start = GwtTextDiff.getDMP().diff_xIndex(diffs, m.getStart());
+		int end = GwtTextDiff.getDMP().diff_xIndex(diffs, m.getEnd());
 		return m.withNewPos(start, end);
 	}
 
@@ -270,11 +269,6 @@ public class VCollabDocAceEditor extends
 	@Override
 	protected Doc getValue() {
 		return new Doc(markerEditor.getText(), markerEditor.getMarkers());
-	}
-
-	@Override
-	protected Doc initialValue() {
-		return Doc.emptyDoc();
 	}
 
 	@Override
@@ -375,7 +369,7 @@ public class VCollabDocAceEditor extends
 			Map<String, MarkerWithContext> added = addedFromUIDL(uidl);
 			Map<String, MarkerDiff> moved = movedFromUIDL(uidl);
 			Collection<String> removedIds = removedFromUIDL(uidl);
-			TextDiff td = TextDiff.fromString(uidl.getStringVariable("dt"));
+			GwtTextDiff td = GwtTextDiff.fromString(uidl.getStringVariable("dt"));
 			return DocDiff.create(td, added, moved, removedIds);
 		}
 		return null;

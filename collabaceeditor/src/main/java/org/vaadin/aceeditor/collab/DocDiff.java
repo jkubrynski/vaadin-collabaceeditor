@@ -12,8 +12,8 @@ import org.vaadin.aceeditor.collab.gwt.shared.Doc;
 import org.vaadin.aceeditor.collab.gwt.shared.MarkerDiff;
 import org.vaadin.aceeditor.collab.gwt.shared.MarkerWithContext;
 import org.vaadin.aceeditor.gwt.shared.Marker;
-import org.vaadin.diffsync.TextDiff;
 import org.vaadin.diffsync.gwt.shared.Diff;
+import org.vaadin.diffsync.text.TextDiff;
 
 public class DocDiff implements Diff<Doc> {
 

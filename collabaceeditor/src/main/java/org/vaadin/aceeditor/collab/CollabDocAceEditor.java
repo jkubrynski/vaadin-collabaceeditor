@@ -14,10 +14,9 @@ import org.vaadin.aceeditor.collab.gwt.shared.MarkerWithContext;
 import org.vaadin.aceeditor.gwt.ace.AceMode;
 import org.vaadin.aceeditor.gwt.ace.AceTheme;
 import org.vaadin.aceeditor.gwt.shared.Marker;
-import org.vaadin.aceeditor.gwt.shared.Util;
 import org.vaadin.diffsync.AbstractDiffSyncComponent;
 import org.vaadin.diffsync.Shared;
-import org.vaadin.diffsync.TextDiff;
+import org.vaadin.diffsync.text.TextDiff;
 
 import com.vaadin.terminal.PaintException;
 import com.vaadin.terminal.PaintTarget;
@@ -35,7 +34,6 @@ import com.vaadin.terminal.PaintTarget;
 public class CollabDocAceEditor extends
 		AbstractDiffSyncComponent<Doc, DocDiff> {
 
-	private User user;
 	private AceMode mode = null;
 	private AceTheme theme = null;
 	private String fontSize = null;
@@ -46,6 +44,8 @@ public class CollabDocAceEditor extends
 	private Marker addMarkerToSelection;
 	private int scrollToPosition;
 	private String scrollToMarkerId;
+	private String userId;
+	private String userStyle;
 
 	public CollabDocAceEditor(Shared<Doc, DocDiff> shared) {
 		super(shared);
@@ -151,12 +151,9 @@ public class CollabDocAceEditor extends
 		requestRepaint();
 	}
 
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
+	public void setUser(String userId, String userStyle) {
+		this.userId = userId;
+		this.userStyle = userStyle;
 		requestRepaint();
 	}
 
@@ -190,21 +187,19 @@ public class CollabDocAceEditor extends
 	}
 
 	@Override
-	protected Doc initialValue() {
-		return Doc.emptyDoc();
-	}
-
-	@Override
 	protected DocDiff diff(Doc v1, Doc v2) {
+		if (v1==null) {
+			v1 = Doc.emptyDoc();
+		}
 		return DocDiff.diff(v1, v2);
 	}
 
 	@Override
 	public void paintContent(PaintTarget target) throws PaintException {
 		super.paintContent(target);
-		if (user != null) {
-			target.addAttribute("userid", user.getUserId());
-			target.addAttribute("userstyle", user.getStyle());
+		if (userId != null) {
+			target.addAttribute("userid", userId);
+			target.addAttribute("userstyle", userStyle);
 		}
 		if (mode != null) {
 			target.addAttribute("ace-mode", mode.toString());

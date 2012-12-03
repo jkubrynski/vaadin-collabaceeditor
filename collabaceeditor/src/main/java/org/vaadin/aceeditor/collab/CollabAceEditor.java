@@ -6,7 +6,7 @@ import org.vaadin.aceeditor.gwt.ace.AceMode;
 import org.vaadin.aceeditor.gwt.ace.AceTheme;
 import org.vaadin.diffsync.AbstractDiffSyncComponent;
 import org.vaadin.diffsync.Shared;
-import org.vaadin.diffsync.TextDiff;
+import org.vaadin.diffsync.text.TextDiff;
 
 import com.vaadin.terminal.PaintException;
 import com.vaadin.terminal.PaintTarget;
@@ -160,12 +160,10 @@ public class CollabAceEditor extends
 	}
 
 	@Override
-	protected String initialValue() {
-		return "";
-	}
-
-	@Override
 	protected TextDiff diff(String v1, String v2) {
+		if (v1==null) {
+			v1 = "";
+		}
 		return TextDiff.diff(v1, v2);
 	}
 

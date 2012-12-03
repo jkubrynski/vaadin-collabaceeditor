@@ -10,10 +10,10 @@ import org.vaadin.aceeditor.collab.gwt.shared.Doc;
 import org.vaadin.aceeditor.collab.gwt.shared.MarkerDiff;
 import org.vaadin.aceeditor.collab.gwt.shared.MarkerWithContext;
 import org.vaadin.aceeditor.gwt.shared.Marker;
-import org.vaadin.diffsync.DiffCalculator;
-import org.vaadin.diffsync.TextDiff;
+import org.vaadin.diffsync.text.TextDiff;
+import org.vaadin.diffsync.DiffTask;
 
-public class ErrorCheckTask implements DiffCalculator<Doc, DocDiff> {
+public class ErrorCheckTask implements DiffTask<Doc, DocDiff> {
 
 	private long latestErrorId = 0;
 
@@ -30,13 +30,7 @@ public class ErrorCheckTask implements DiffCalculator<Doc, DocDiff> {
 	}
 
 //	@Override
-	public boolean needsToRunAfter(DocDiff diff, long byCollaboratorId) {
-		return diff==null || !diff.getTextDiff().isIdentity();
-	}
-
-//	@Override
-	public DocDiff calcDiff(Doc value) throws InterruptedException {
-
+	public DocDiff exec(Doc value, DocDiff diff, long collaboratorId) {
 		LinkedList<String> earlierErrors = new LinkedList<String>();
 		for (Entry<String, Marker> e : value.getMarkers().entrySet()) {
 			if (e.getValue().getType() == Marker.Type.ERROR) {
@@ -58,4 +52,7 @@ public class ErrorCheckTask implements DiffCalculator<Doc, DocDiff> {
 				new HashMap<String, MarkerDiff>(), earlierErrors);
 		return dd;
 	}
+
+
+	
 }
