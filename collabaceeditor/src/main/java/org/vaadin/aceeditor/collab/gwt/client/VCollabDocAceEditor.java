@@ -31,10 +31,6 @@ public class VCollabDocAceEditor extends
 
 	protected MarkerEditorFacade markerEditor = new AceMarkerEditorFacade();
 
-	private boolean editing = false;
-	private String currentEdit;
-	private Date currentEditDate;
-
 	private boolean listenersAdded = false;
 
 	private boolean listeningSelections;
@@ -48,27 +44,6 @@ public class VCollabDocAceEditor extends
 	public VCollabDocAceEditor() {
 		markerEditor.initializeEditor();
 		initWidget(markerEditor.getWidget());
-	}
-
-	private void newEditMarker() {
-		removeEditMarker();
-		createEditMarker();
-		editing = true;
-	}
-
-	private void removeEditMarker() {
-		;
-		if (currentEdit != null) {
-			markerEditor.removeMarker(currentEdit);
-		}
-	}
-
-	private void createEditMarker() {
-		String mid = newItemId();
-		currentEdit = mid;
-		int cursor = markerEditor.getCursor();
-		markerEditor.putMarker(mid,
-				Marker.newEditMarker(cursor, cursor + 1, userId, userStyle));
 	}
 
 	@Override
@@ -150,33 +125,14 @@ public class VCollabDocAceEditor extends
 //	@Override
 	public void textChanged() {
 //		VConsole.log("textChanged");
-		if (userId != null) {
-			updateEditMarker();
-		}
 		if (listeningSelections) {
 			selectionChanged = true;
 		}
 		valueChanged();
 	}
 
-	private void updateEditMarker() {
-		if (!editing) {
-			newEditMarker();
-		} else if (currentEditDate.getTime() + 3000 < (new Date()).getTime()) {
-//			VConsole.log("timeout removing --- ");
-			newEditMarker();
-		}
-		currentEditDate = new Date();
-	}
-
 //	@Override
 	public void cursorChanged() {
-		if (currentEdit != null) {
-			Marker em = markerEditor.getMarker(currentEdit);
-			if (em == null || !em.touches(markerEditor.getCursor())) {
-				editing = false;
-			}
-		}
 		if (listeningSelections) {
 			selectionChanged = true;
 			valueChanged();

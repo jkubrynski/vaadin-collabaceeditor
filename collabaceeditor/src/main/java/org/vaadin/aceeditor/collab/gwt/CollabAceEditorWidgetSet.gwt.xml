@@ -8,6 +8,5 @@
 	<inherits name="com.vaadin.terminal.gwt.DefaultWidgetSet" />
 	<inherits name="org.vaadin.diffsync.gwt.DiffSyncWidgetSet" />
 	<inherits name="org.vaadin.aceeditor.gwt.AceEditorWidgetSet" />
-
 	
 </module> 
